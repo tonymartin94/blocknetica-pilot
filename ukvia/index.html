@@ -25,40 +25,55 @@
     .alt { font-size:14px; color:#475569; }
   </style>
 
-  <!-- GA4 -->
+  <!-- GA4 (debug enabled) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-KDNT3R7NF5"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){ dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-KDNT3R7NF5', { anonymize_ip: true });
 
+    // Initialize GA4
+    gtag('js', new Date());
+    // debug_mode: true ensures events appear in Admin → DebugView immediately
+    gtag('config', 'G-KDNT3R7NF5', { anonymize_ip: true, debug_mode: true });
+
+    // Helper: read ?id= from the URL
     function getRecipientId(){
       try { return new URL(window.location.href).searchParams.get('id') || 'unknown'; }
       catch { return 'unknown'; }
     }
+
     document.addEventListener('DOMContentLoaded', () => {
       const rid = getRecipientId();
-      gtag('event', 'qr_scan', { recipient_id: rid });
+      console.log('[INIT] Recipient ID:', rid);
 
+      // Fire our custom event and log it locally too
+      gtag('event', 'qr_scan', { recipient_id: rid });
+      console.log('[GA4] qr_scan fired with recipient_id =', rid);
+
+      // Personalize the mailto CTA with the recipient id
       const cta = document.getElementById('cta');
       if (cta) {
         const email = 'contact@blocknetica.io';
         const subject = encodeURIComponent('Pilot request — recipient: ' + rid);
-        const body = encodeURIComponent(`Hi Blocknetica team,
+        const body = encodeURIComponent(
+`Hi Blocknetica team,
 
 I'd like to discuss the age verification pilot.
 
 Recipient ID: ${rid}
 
-Thanks,`);
+Thanks,`
+        );
         cta.href = `mailto:${email}?subject=${subject}&body=${body}`;
+        console.log('[CTA] mailto set for recipient:', rid);
       }
 
+      // Fallback link to the same PDF; append r= param for light attribution
       const fallback = document.getElementById('fallback');
       if (fallback) {
-        const base = './deck.pdf';
-        fallback.href = base + (rid && rid !== 'unknown' ? '?r=' + encodeURIComponent(rid) : '');
+        const pdfUrl = 'https://tonymartin94.github.io/blocknetica-pilot/ukvia/deck.pdf';
+        fallback.href = pdfUrl + (rid && rid !== 'unknown' ? '?r=' + encodeURIComponent(rid) : '');
+        console.log('[Fallback] link set:', fallback.href);
       }
     });
   </script>
@@ -75,12 +90,14 @@ Thanks,`);
 
     <div class="card">
       <div class="deck">
-        <!-- IMPORTANT: This loads the local file /ukvia/deck.pdf (no Google Drive) -->
-        <embed src="./deck.pdf" type="application/pdf" />
+        <!-- Embed the PDF from your published GitHub Pages path (absolute URL avoids path/case issues) -->
+        <embed src="https://tonymartin94.github.io/blocknetica-pilot/ukvia/deck.pdf" type="application/pdf" />
       </div>
 
       <a id="cta" class="btn" href="#">Request Pilot Access</a>
-      <p class="alt">Having trouble viewing? <a id="fallback" href="./deck.pdf" target="_blank" rel="noopener">Open the PDF directly</a>.</p>
+      <p class="alt">Having trouble viewing?
+        <a id="fallback" href="https://tonymartin94.github.io/blocknetica-pilot/ukvia/deck.pdf" target="_blank" rel="noopener">Open the PDF directly</a>.
+      </p>
     </div>
 
     <p class="footer">© <script>document.write(new Date().getFullYear())</script> Blocknetica • Privacy-preserving, regulator-ready verification</p>
