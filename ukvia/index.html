@@ -25,18 +25,15 @@
     .alt { font-size:14px; color:#475569; }
   </style>
 
-  <!-- GA4 (debug enabled) -->
+  <!-- GA4 (production) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-KDNT3R7NF5"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){ dataLayer.push(arguments); }
 
-    // Initialize GA4
     gtag('js', new Date());
-    // debug_mode: true ensures events appear in Admin → DebugView immediately
-    gtag('config', 'G-KDNT3R7NF5', { anonymize_ip: true, debug_mode: true });
+    gtag('config', 'G-KDNT3R7NF5', { anonymize_ip: true });
 
-    // Helper: read ?id= from the URL
     function getRecipientId(){
       try { return new URL(window.location.href).searchParams.get('id') || 'unknown'; }
       catch { return 'unknown'; }
@@ -44,36 +41,30 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       const rid = getRecipientId();
-      console.log('[INIT] Recipient ID:', rid);
 
-      // Fire our custom event and log it locally too
+      // Fire QR scan event with recipient_id for analytics
       gtag('event', 'qr_scan', { recipient_id: rid });
-      console.log('[GA4] qr_scan fired with recipient_id =', rid);
 
-      // Personalize the mailto CTA with the recipient id
+      // Configure mailto CTA (clean subject/body, no recipient_id)
       const cta = document.getElementById('cta');
       if (cta) {
         const email = 'contact@blocknetica.io';
-        const subject = encodeURIComponent('Re: Age Verification — Blocknetica [' + rid + ']');
+        const subject = encodeURIComponent('Re: Age Verification — Blocknetica');
         const body = encodeURIComponent(
-`Hi,
+`Hi Blocknetica team,
 
 I’d like to talk about your age verification solution.
-
-Recipient ID: ${rid}
 
 Thanks,`
         );
         cta.href = `mailto:${email}?subject=${subject}&body=${body}`;
-        console.log('[CTA] mailto set for recipient:', rid);
       }
 
-      // Fallback link to the same PDF; append r= param for light attribution
+      // Fallback PDF link (append ?r= for light attribution in GA if needed)
       const fallback = document.getElementById('fallback');
       if (fallback) {
         const pdfUrl = 'https://tonymartin94.github.io/blocknetica-pilot/ukvia/deck.pdf';
         fallback.href = pdfUrl + (rid && rid !== 'unknown' ? '?r=' + encodeURIComponent(rid) : '');
-        console.log('[Fallback] link set:', fallback.href);
       }
     });
   </script>
@@ -90,7 +81,6 @@ Thanks,`
 
     <div class="card">
       <div class="deck">
-        <!-- Embed the PDF from your published GitHub Pages path (absolute URL avoids path/case issues) -->
         <embed src="https://tonymartin94.github.io/blocknetica-pilot/ukvia/deck.pdf" type="application/pdf" />
       </div>
 
