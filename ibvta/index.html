@@ -6,7 +6,6 @@
   <title>Blocknetica — Seamless Age Verification (IBVTA)</title>
   <meta name="description" content="Less than 2 seconds for your customer. Regulator-ready proof for your business." />
   <meta name="theme-color" content="#0ea5e9" />
-
   <style>
     body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       background:#f8fafc; color:#0f172a; margin:0; padding:0; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
@@ -30,20 +29,20 @@
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){ dataLayer.push(arguments); }
-
     gtag('js', new Date());
     gtag('config', 'G-KDNT3R7NF5', { anonymize_ip: true });
 
-    function getRecipientId(){
-      try { return new URL(window.location.href).searchParams.get('id') || 'unknown'; }
-      catch { return 'unknown'; }
+    function qp(name){
+      try { return new URL(window.location.href).searchParams.get(name) || ''; }
+      catch { return ''; }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      const rid = getRecipientId();
-
+      const rid = qp('id') || 'unknown';
+      const v = qp('v') || '1'; // bump this in your QR when you update
       gtag('event', 'qr_scan', { recipient_id: rid });
 
+      // Mailto CTA
       const cta = document.getElementById('cta');
       if (cta) {
         const email = 'contact@blocknetica.io';
@@ -58,10 +57,17 @@ Thanks,`
         cta.href = `mailto:${email}?subject=${subject}&body=${body}`;
       }
 
+      // Set PDF URLs with version param
+      const pdfBase = 'https://verify.blocknetica.io/ibvta/IBVTA.pdf';
+      const pdfUrl  = `${pdfBase}?v=${encodeURIComponent(v)}`;
+
+      const deck = document.getElementById('deck');
+      if (deck) deck.setAttribute('src', pdfUrl);
+
       const fallback = document.getElementById('fallback');
       if (fallback) {
-        const pdfUrl = 'https://verify.blocknetica.io/ibvta/IBVTA.pdf';
-        fallback.href = pdfUrl + (rid && rid !== 'unknown' ? '?r=' + encodeURIComponent(rid) : '');
+        const ridParam = rid && rid !== 'unknown' ? `&r=${encodeURIComponent(rid)}` : '';
+        fallback.href = pdfUrl + ridParam;
       }
     });
   </script>
@@ -78,13 +84,13 @@ Thanks,`
 
     <div class="card">
       <div class="deck">
-        <!-- Embed the IBVTA PDF -->
-        <embed src="https://verify.blocknetica.io/ibvta/IBVTA.pdf" type="application/pdf" />
+        <!-- src set by JS with ?v= -->
+        <embed id="deck" type="application/pdf" />
       </div>
 
       <a id="cta" class="btn" href="#">Talk to Us</a>
       <p class="alt">Having trouble viewing?
-        <a id="fallback" href="https://verify.blocknetica.io/ibvta/IBVTA.pdf" target="_blank" rel="noopener">Open the PDF directly</a>.
+        <a id="fallback" href="#" target="_blank" rel="noopener">Open the PDF directly</a>.
       </p>
     </div>
 
