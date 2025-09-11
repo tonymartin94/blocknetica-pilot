@@ -60,11 +60,11 @@ Thanks,`
         cta.href = `mailto:${email}?subject=${subject}&body=${body}`;
       }
 
-      // Fallback PDF link (append ?r= for light attribution in GA if needed)
+      // Fallback PDF link (append ?r= and ?v= for cache-busting)
       const fallback = document.getElementById('fallback');
       if (fallback) {
-        const pdfUrl = 'https://tonymartin94.github.io/blocknetica-pilot/ukvia/deck.pdf';
-        fallback.href = pdfUrl + (rid && rid !== 'unknown' ? '?r=' + encodeURIComponent(rid) : '');
+        const pdfUrl = 'https://tonymartin94.github.io/blocknetica-pilot/ukvia/deck.pdf?v=2';
+        fallback.href = pdfUrl + (rid && rid !== 'unknown' ? '&r=' + encodeURIComponent(rid) : '');
       }
     });
   </script>
@@ -81,12 +81,12 @@ Thanks,`
 
     <div class="card">
       <div class="deck">
-        <embed src="https://tonymartin94.github.io/blocknetica-pilot/ukvia/deck.pdf" type="application/pdf" />
+        <embed src="https://tonymartin94.github.io/blocknetica-pilot/ukvia/deck.pdf?v=2" type="application/pdf" />
       </div>
 
       <a id="cta" class="btn" href="#">Talk to us</a>
       <p class="alt">Having trouble viewing?
-        <a id="fallback" href="https://tonymartin94.github.io/blocknetica-pilot/ukvia/deck.pdf" target="_blank" rel="noopener">Open the PDF directly</a>.
+        <a id="fallback" href="https://tonymartin94.github.io/blocknetica-pilot/ukvia/deck.pdf?v=2" target="_blank" rel="noopener">Open the PDF directly</a>.
       </p>
     </div>
 
