@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Blocknetica — Seamless Age Verification (Vape UK)</title>
+  <meta name="description" content="Less than 2 seconds for your customer. Regulator-ready proof for your business." />
+  <meta name="theme-color" content="#0ea5e9" />
+
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background:#f8fafc; color:#0f172a; margin:0; padding:0; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+    .brand { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .logo { width:48px; height:48px; border-radius:12px; background:#0b1220; color:#fff; display:grid; place-items:center; font-weight:700; font-size:20px; box-shadow:0 6px 14px rgba(2,8,23,.15); }
+    .brandname { font-weight:800; font-size:20px; letter-spacing:.2px; color:#0f172a; }
+    h1 { margin:0 0 8px; font-size:26px; }
+    p.sub { margin:0 0 24px; color:#475569; }
+    .card { background:#fff; border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,.08); border:1px solid #e2e8f0; }
+    .deck { position:relative; width:100%; height:80vh; border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; margin-bottom:16px; background:#fff; }
+    .deck embed { width:100%; height:100%; border:0; display:block; }
+    .btn { display:inline-block; background:#0ea5e9; color:#fff; padding:12px 20px; border-radius:10px; text-decoration:none; font-weight:600; box-shadow:0 6px 14px rgba(14,165,233,.3); }
+    .btn:focus-visible { outline:2px solid rgba(14,165,233,.4); outline-offset:2px; }
+    .footer { margin-top:24px; color:#64748b; font-size:14px; text-align:center; }
+    .alt { font-size:14px; color:#475569; }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KDNT3R7NF5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+
+    gtag('js', new Date());
+    gtag('config', 'G-KDNT3R7NF5', { anonymize_ip: true });
+
+    function getRecipientId(){
+      try { return new URL(window.location.href).searchParams.get('id') || 'unknown'; }
+      catch { return 'unknown'; }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const rid = getRecipientId();
+
+      // Fire QR scan event specific to Vape UK
+      gtag('event', 'qr_scan', { recipient_id: rid, association: 'vapeuk' });
+
+      // Configure mailto CTA
+      const cta = document.getElementById('cta');
+      if (cta) {
+        const email = 'contact@blocknetica.io';
+        const subject = encodeURIComponent('Re: Age Verification — Vape UK');
+        const body = encodeURIComponent(
+`Hi Blocknetica team,
+
+I'd like to discuss your age verification solution for Vape UK.
+
+Thanks,`
+        );
+        cta.href = `mailto:${email}?subject=${subject}&body=${body}`;
+      }
+
+      // Fallback PDF link
+      const fallback = document.getElementById('fallback');
+      if (fallback) {
+        const pdfUrl = 'https://verify.blocknetica.io/vapeuk/vapeuk.pdf';
+        fallback.href = pdfUrl + (rid && rid !== 'unknown' ? '?r=' + encodeURIComponent(rid) : '');
+      }
+    });
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo">B</div>
+      <div class="brandname">Blocknetica</div>
+    </div>
+
+    <h1>Seamless Age Verification in Action (Vape UK)</h1>
+    <p class="sub">Less than 2 seconds for your customer. Regulator-ready proof for your business.</p>
+
+    <div class="card">
+      <div class="deck">
+        <embed src="https://verify.blocknetica.io/vapeuk/vapeuk.pdf" type="application/pdf" />
+      </div>
+
+      <a id="cta" class="btn" href="#">Talk to Us</a>
+      <p class="alt">Having trouble viewing?
+        <a id="fallback" href="https://verify.blocknetica.io/vapeuk/vapeuk.pdf" target="_blank" rel="noopener">Open the PDF directly</a>.
+      </p>
+    </div>
+
+    <p class="footer">© <script>document.write(new Date().getFullYear())</script> Blocknetica • Privacy-preserving, regulator-ready verification</p>
+  </div>
+</body>
+</html>
