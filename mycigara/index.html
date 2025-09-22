@@ -28,9 +28,25 @@
   <!-- GA4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-KDNT3R7NF5"></script>
   <script>
+    // --------- BUMP THESE WHEN YOU UPDATE ----------
+    const PAGE_VERSION = '2025-09-22-1';   // change when you redeploy this HTML
+    const PDF_VERSION  = '2025-09-22-1';   // change when you upload a new mycigara.pdf
+    // ------------------------------------------------
+
+    // Ensure this page URL carries a version param (helps bust cached HTML)
+    (function ensurePageVersion(){
+      try {
+        const u = new URL(location.href);
+        if (!u.searchParams.has('v')) {
+          u.searchParams.set('v', PAGE_VERSION);
+          history.replaceState(null, '', u.toString());
+        }
+      } catch(e) {}
+    })();
+
+    // GA setup
     window.dataLayer = window.dataLayer || [];
     function gtag(){ dataLayer.push(arguments); }
-
     gtag('js', new Date());
     gtag('config', 'G-KDNT3R7NF5', { anonymize_ip: true });
 
@@ -41,11 +57,9 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       const rid = getRecipientId();
-
-      // Fire QR scan event specific to myCigara
       gtag('event', 'qr_scan', { recipient_id: rid, association: 'mycigara' });
 
-      // Configure mailto CTA
+      // CTA mailto
       const cta = document.getElementById('cta');
       if (cta) {
         const email = 'contact@blocknetica.io';
@@ -55,17 +69,20 @@
 
 I'd like to discuss your age verification solution for myCigara.
 
-Thanks,`
-        );
+Thanks,`);
         cta.href = `mailto:${email}?subject=${subject}&body=${body}`;
       }
 
-      // Fallback PDF link
+      // Versioned PDF URL (same QR, always fresh file)
+      const basePdf = 'https://verify.blocknetica.io/mycigara/mycigara.pdf';
+      const pdfUrl  = `${basePdf}?v=${encodeURIComponent(PDF_VERSION)}` +
+                      ((rid && rid !== 'unknown') ? `&r=${encodeURIComponent(rid)}` : '');
+
+      const embed = document.getElementById('deck-embed');
+      if (embed) embed.src = pdfUrl;
+
       const fallback = document.getElementById('fallback');
-      if (fallback) {
-        const pdfUrl = 'https://verify.blocknetica.io/mycigara/mycigara.pdf';
-        fallback.href = pdfUrl + (rid && rid !== 'unknown' ? '?r=' + encodeURIComponent(rid) : '');
-      }
+      if (fallback) fallback.href = pdfUrl;
     });
   </script>
 </head>
@@ -81,12 +98,13 @@ Thanks,`
 
     <div class="card">
       <div class="deck">
-        <embed src="https://verify.blocknetica.io/mycigara/mycigara.pdf" type="application/pdf" />
+        <embed id="deck-embed" src="" type="application/pdf" />
       </div>
 
       <a id="cta" class="btn" href="#">Talk to Us</a>
-      <p class="alt">Having trouble viewing?
-        <a id="fallback" href="https://verify.blocknetica.io/mycigara/mycigara.pdf" target="_blank" rel="noopener">Open the PDF directly</a>.
+      <p class="alt">
+        Having trouble viewing?
+        <a id="fallback" href="#" target="_blank" rel="noopener">Open the PDF directly</a>.
       </p>
     </div>
 
