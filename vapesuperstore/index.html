@@ -42,6 +42,9 @@
     document.addEventListener('DOMContentLoaded', () => {
       const rid = getRecipientId();
 
+      // Force fresh PDF load (cache-busting)
+      const pdfUrl = 'https://verify.blocknetica.io/vapesuperstore/vapesuperstore.pdf?v=' + Date.now();
+
       // Fire QR scan event specific to Vape Superstore
       gtag('event', 'qr_scan', { recipient_id: rid, association: 'vapesuperstore' });
 
@@ -60,11 +63,14 @@ Thanks,`
         cta.href = `mailto:${email}?subject=${subject}&body=${body}`;
       }
 
+      // Update PDF embed
+      const embed = document.getElementById('deck-pdf');
+      if (embed) embed.src = pdfUrl;
+
       // Fallback PDF link
       const fallback = document.getElementById('fallback');
       if (fallback) {
-        const pdfUrl = 'https://verify.blocknetica.io/vapesuperstore/vapesuperstore.pdf';
-        fallback.href = pdfUrl + (rid && rid !== 'unknown' ? '?r=' + encodeURIComponent(rid) : '');
+        fallback.href = pdfUrl + (rid && rid !== 'unknown' ? '&r=' + encodeURIComponent(rid) : '');
       }
     });
   </script>
@@ -81,12 +87,12 @@ Thanks,`
 
     <div class="card">
       <div class="deck">
-        <embed src="https://verify.blocknetica.io/vapesuperstore/vapesuperstore.pdf" type="application/pdf" />
+        <embed id="deck-pdf" src="" type="application/pdf" />
       </div>
 
       <a id="cta" class="btn" href="#">Talk to Us</a>
       <p class="alt">Having trouble viewing?
-        <a id="fallback" href="https://verify.blocknetica.io/vapesuperstore/vapesuperstore.pdf" target="_blank" rel="noopener">Open the PDF directly</a>.
+        <a id="fallback" href="#" target="_blank" rel="noopener">Open the PDF directly</a>.
       </p>
     </div>
 
