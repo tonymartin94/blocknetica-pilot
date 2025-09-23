@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Blocknetica — Seamless Age Verification (Vape Superstore)</title>
+  <title>Blocknetica — Seamless Age Verification (Vape Store)</title>
   <meta name="description" content="Less than 2 seconds for your customer. Regulator-ready proof for your business." />
   <meta name="theme-color" content="#0ea5e9" />
 
@@ -43,9 +43,9 @@
       const rid = getRecipientId();
 
       // Force fresh PDF load (cache-busting)
-      const pdfUrl = 'https://verify.blocknetica.io/vapesuperstore/Vapesuperstore.pdf?v=' + Date.now();
+      const pdfUrl = 'https://verify.blocknetica.io/vapestore/Vapestore.pdf?v=' + Date.now();
 
-      // Fire QR scan event specific to Vape Superstore
+      // Fire QR scan event specific to Vape store
       gtag('event', 'qr_scan', { recipient_id: rid, association: 'vapesuperstore' });
 
       // Configure mailto CTA
