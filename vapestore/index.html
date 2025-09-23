@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Blocknetica — Seamless Age Verification (Vapestore)</title>
+  <title>Blocknetica — Seamless Age Verification (Vape Superstore)</title>
   <meta name="description" content="Less than 2 seconds for your customer. Regulator-ready proof for your business." />
   <meta name="theme-color" content="#0ea5e9" />
 
@@ -43,20 +43,20 @@
       const rid = getRecipientId();
 
       // Force fresh PDF load (cache-busting)
-      const pdfUrl = 'https://verify.blocknetica.io/vapestore/vapestore.pdf?v=' + Date.now();
+      const pdfUrl = 'https://verify.blocknetica.io/vapesuperstore/vapesuperstore.pdf?v=' + Date.now();
 
-      // Fire QR scan event specific to Vapestore
-      gtag('event', 'qr_scan', { recipient_id: rid, association: 'vapestore' });
+      // Fire QR scan event specific to Vape Superstore
+      gtag('event', 'qr_scan', { recipient_id: rid, association: 'vapesuperstore' });
 
       // Configure mailto CTA
       const cta = document.getElementById('cta');
       if (cta) {
         const email = 'contact@blocknetica.io';
-        const subject = encodeURIComponent('Re: Age Verification — Vapestore');
+        const subject = encodeURIComponent('Re: Age Verification — Vape Superstore');
         const body = encodeURIComponent(
 `Hi Blocknetica team,
 
-I'd like to discuss your age verification solution for Vapestore.
+I'd like to discuss your age verification solution for Vape Superstore.
 
 Thanks,`
         );
@@ -82,7 +82,7 @@ Thanks,`
       <div class="brandname">Blocknetica</div>
     </div>
 
-    <h1>Seamless Age Verification in Action (Vapestore)</h1>
+    <h1>Seamless Age Verification in Action (Vape Superstore)</h1>
     <p class="sub">Less than 2 seconds for your customer. Regulator-ready proof for your business.</p>
 
     <div class="card">
