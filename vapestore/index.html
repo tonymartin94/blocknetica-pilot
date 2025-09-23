@@ -43,7 +43,7 @@
       const rid = getRecipientId();
 
       // Force fresh PDF load (cache-busting)
-      const pdfUrl = 'https://verify.blocknetica.io/vapesuperstore/vapesuperstore.pdf?v=' + Date.now();
+      const pdfUrl = 'https://verify.blocknetica.io/vapesuperstore/Vapesuperstore.pdf?v=' + Date.now();
 
       // Fire QR scan event specific to Vape Superstore
       gtag('event', 'qr_scan', { recipient_id: rid, association: 'vapesuperstore' });
