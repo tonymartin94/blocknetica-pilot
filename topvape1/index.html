@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Blocknetica — Seamless Age Verification (Topvape1)</title>
+  <title>Blocknetica — Seamless Age Verification (Top Vape One)</title>
   <meta name="description" content="Less than 2 seconds for your customer. Regulator-ready proof for your business." />
   <meta name="theme-color" content="#0ea5e9" />
 
@@ -28,9 +31,19 @@
   <!-- GA4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-KDNT3R7NF5"></script>
   <script>
+    // Add ?v= once to page URL to break HTML cache
+    (function ensureVersionParam() {
+      try {
+        var url = new URL(window.location.href);
+        if (!url.searchParams.get('v')) {
+          url.searchParams.set('v', Date.now().toString());
+          window.location.replace(url.toString());
+        }
+      } catch (e) {}
+    })();
+
     window.dataLayer = window.dataLayer || [];
     function gtag(){ dataLayer.push(arguments); }
-
     gtag('js', new Date());
     gtag('config', 'G-KDNT3R7NF5', { anonymize_ip: true });
 
@@ -42,32 +55,34 @@
     document.addEventListener('DOMContentLoaded', () => {
       const rid = getRecipientId();
 
-      // Force fresh PDF load (cache-busting bump)
-      const pdfUrl = 'https://verify.blocknetica.io/topvape1/topvape1.pdf?v=' + Date.now();
+      // PDF path (confirmed correct)
+      const PDF_PATH = 'https://verify.blocknetica.io/topvape1/topvape1.pdf';
 
-      // Fire QR scan event specific to Topvape1
-      gtag('event', 'qr_scan', { recipient_id: rid, association: 'topvape1' });
+      // Add bump parameter
+      const pdfUrl = PDF_PATH + '?v=' + Date.now();
 
-      // Configure mailto CTA
+      // Fire QR scan event
+      gtag('event', 'qr_scan', { recipient_id: rid, association: 'topvapeOne' });
+
+      // Mailto CTA
       const cta = document.getElementById('cta');
       if (cta) {
         const email = 'contact@blocknetica.io';
-        const subject = encodeURIComponent('Re: Age Verification — Topvape1');
+        const subject = encodeURIComponent('Re: Age Verification — TopvapeOne');
         const body = encodeURIComponent(
 `Hi Blocknetica team,
 
-I'd like to discuss your age verification solution for Topvape1.
+I'd like to discuss your age verification solution for Top Vape One.
 
 Thanks,`
         );
         cta.href = `mailto:${email}?subject=${subject}&body=${body}`;
       }
 
-      // Update PDF embed
+      // Update embed + fallback
       const embed = document.getElementById('deck-pdf');
       if (embed) embed.src = pdfUrl;
 
-      // Fallback PDF link
       const fallback = document.getElementById('fallback');
       if (fallback) {
         fallback.href = pdfUrl + (rid && rid !== 'unknown' ? '&r=' + encodeURIComponent(rid) : '');
@@ -82,7 +97,7 @@ Thanks,`
       <div class="brandname">Blocknetica</div>
     </div>
 
-    <h1>Seamless Age Verification in Action (Topvape1)</h1>
+    <h1>Seamless Age Verification in Action (Top Vape One)</h1>
     <p class="sub">Less than 2 seconds for your customer. Regulator-ready proof for your business.</p>
 
     <div class="card">
